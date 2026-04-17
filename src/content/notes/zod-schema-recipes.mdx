@@ -1,0 +1,27 @@
+---
+title: "Zodスキーマ設計の備忘録"
+description: "入力境界で使うZodスキーマの組み立て方を、ブログ運用でも再利用しやすい形で整理したメモ。"
+date: 2026-04-17
+tags: ["Zod", "TypeScript", "Library"]
+library: "zod"
+featured: true
+readingTime: "4 min"
+---
+
+頻出パターンだけを短く持っておくと、画面追加時の判断が速くなります。
+
+## 使い分け
+
+- `z.coerce.*`: フォーム入力や frontmatter の正規化
+- `safeParse`: UIでエラーを返したいとき
+- `transform`: 表示用の値に寄せるとき
+
+```ts
+const articleSchema = z.object({
+  title: z.string().min(1),
+  tags: z.array(z.string()).default([]),
+  date: z.coerce.date()
+});
+```
+
+複雑な `refine` を増やす前に、入力モデルを分割できないかを先に見ます。

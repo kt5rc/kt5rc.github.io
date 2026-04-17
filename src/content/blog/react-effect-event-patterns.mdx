@@ -1,0 +1,39 @@
+---
+title: "useEffectEventで副作用の境界を整理する"
+description: "Reactの副作用ロジックを分離し、再購読や stale closure を減らすためのパターン整理。"
+date: 2026-04-17
+tags: ["React", "TypeScript", "Hooks"]
+featured: true
+readingTime: "7 min"
+---
+
+`useEffect` にイベントハンドラ相当の処理まで詰め込むと、依存配列の調整が先に来て設計が後回しになります。
+
+この記事では、購読開始とイベント反応を切り離して、責務を明確に保つための考え方を整理します。
+
+## 境界の切り方
+
+- `useEffect`: 接続や購読の開始・終了
+- `useEffectEvent`: 最新 state を参照しながら動く反応ロジック
+
+```tsx
+const onMessage = useEffectEvent((payload: Message) => {
+  startTransition(() => {
+    setMessages((current) => [...current, payload]);
+  });
+});
+
+useEffect(() => {
+  const socket = connect(roomId);
+  socket.on("message", onMessage);
+  return () => socket.close();
+}, [roomId]);
+```
+
+## 判断基準
+
+- 再接続の契機が `roomId` だけなら、購読は `roomId` だけに依存させる
+- 表示更新に必要な最新 state は effect event 側で扱う
+- 副作用の開始条件と、発火後のUI更新条件を混ぜない
+
+運用上は、「何が再接続条件か」を最初に文章で書いてから実装に落とすとぶれにくくなります。
