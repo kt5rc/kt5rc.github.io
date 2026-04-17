@@ -1,0 +1,25 @@
+---
+title: "Astro IslandsとReact常時CSRの差分を計測する"
+description: "GitHub Pages運用を前提に、静的配信 + 部分ハイドレーションがどこまで効くかを簡易比較したPoC。"
+date: 2026-04-17
+tags: ["Astro", "React", "PoC", "Performance"]
+status: verified
+featured: true
+readingTime: "6 min"
+---
+
+このPoCでは、トップページの一覧UIを Astro で静的生成し、絞り込みだけを React island に切り出しました。
+
+## 観点
+
+- 初回HTMLの量
+- ハイドレーション対象の範囲
+- Pages 配信時の運用単純さ
+
+## 結論
+
+- 一覧、見出し、本文導線は Astro で十分
+- インタラクションが必要な箇所だけ React island 化すると保守しやすい
+- 技術ブログ用途なら SSR 前提より静的配信のほうが Pages と相性が良い
+
+今後は検索、タグフィルタ、関連記事の優先順位付けを island 側で検証します。

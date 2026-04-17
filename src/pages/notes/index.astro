@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import ArticleCard from "../../components/ArticleCard.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const entries = (await getCollection("notes", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<BaseLayout title="Notes | ktnd111" description="ライブラリ備忘録の一覧">
+  <section class="page-intro">
+    <SectionHeader
+      eyebrow="Notes"
+      title="ライブラリ備忘録"
+      description="忘れやすい設定やAPIの差分を、短い粒度で再利用できる形に残します。"
+    />
+    <div class="card-grid">
+      {entries.map((entry) => (
+        <ArticleCard
+          href={`/notes/${entry.slug}/`}
+          title={entry.data.title}
+          description={entry.data.description}
+          meta={`${entry.data.date.toLocaleDateString("ja-JP")} / ${entry.data.library}`}
+          tags={entry.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

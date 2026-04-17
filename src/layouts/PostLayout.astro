@@ -1,0 +1,32 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+type Props = {
+  title: string;
+  description: string;
+  date: Date;
+  tags?: string[];
+  readingTime?: string;
+};
+
+const { title, description, date, tags = [], readingTime } = Astro.props;
+const meta = `${date.toLocaleDateString("ja-JP")}${readingTime ? ` / ${readingTime}` : ""}`;
+---
+
+<BaseLayout title={`${title} | ktnd111`} description={description}>
+  <article class="post-shell">
+    <p class="eyebrow">Article</p>
+    <h1>{title}</h1>
+    <p class="post-meta">{meta}</p>
+    {tags.length > 0 && (
+      <div class="tag-row">
+        {tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+    <div class="post-body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

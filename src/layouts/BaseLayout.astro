@@ -1,0 +1,52 @@
+---
+import "../styles/global.css";
+
+type NavItem = {
+  href: string;
+  label: string;
+};
+
+type Props = {
+  title: string;
+  description?: string;
+};
+
+const { title, description = "TS/React中心の技術ブログと検証ノート" } = Astro.props;
+const navItems: NavItem[] = [
+  { href: "/", label: "Home" },
+  { href: "/blog", label: "Blog" },
+  { href: "/experiments", label: "Experiments" },
+  { href: "/notes", label: "Notes" }
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="/">
+          <span>ktnd111</span>
+          <strong>TS / React Notes</strong>
+        </a>
+        <nav>
+          {navItems.map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))}
+        </nav>
+      </header>
+      <main>
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <p>Built with Astro, React, TypeScript, and MDX.</p>
+      </footer>
+    </div>
+  </body>
+</html>
