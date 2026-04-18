@@ -1,4 +1,4 @@
-# ktnd111.github.io
+# kt5rc.github.io
 
 TypeScript / React中心の技術ブログを Astro + MDX で運用するための構成です。
 
